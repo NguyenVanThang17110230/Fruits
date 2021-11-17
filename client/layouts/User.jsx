@@ -3,10 +3,10 @@ import Header from '../containers/Header'
 
 const User = ({ children }) => {
     return (
-        <div>
+        <>
           <Header />
-          <div>{children}</div>
-        </div>
+          {children}
+        </>
     )
 }
 

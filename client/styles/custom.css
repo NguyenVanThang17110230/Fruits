@@ -1,0 +1,32 @@
+#add-cart{
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%,-50%);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+#add-cart,#add-cart-2:hover{
+    background-color: #000 !important;
+    color: #fff;
+    
+}
+#add-cart,#add-cart-2:hover svg{
+    stroke: #fff !important;
+}
+#card-pr:hover #add-cart{
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%,-170%);
+}
+#read-more{
+    transition: all 0.3s;
+}
+#read-more:hover{
+    background-color: #000 !important;
+    color: #fff;
+}
+#ip-search:focus{
+    outline: none;
+    border-color: #157347;
+    box-shadow: none;
+}
