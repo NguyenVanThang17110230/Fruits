@@ -43,6 +43,9 @@ export default class Home extends Component {
                 <div className="card-body text-center">
                   <span className="card-text text-secondary fw-light">Bơ</span>
                   <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
+                  <Link href="/product-detail?id=1">
+                        <a href="#">Xem chi tiết</a>
+                  </Link>
                   <div
                     id="add-cart"
                     href="#"

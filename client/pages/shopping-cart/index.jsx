@@ -5,7 +5,7 @@ import User from "../../layouts/User";
 
 const ShoppingCart = () => {
   return (
-    <div className="container mt-5">
+    <div className="container my-5">
       <div className="row">
         <div className="col-8">
           <div className="card p-3">

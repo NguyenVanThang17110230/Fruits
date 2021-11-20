@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
       <div className="container-fluid px-5">
         <a className="navbar-brand fw-bold" href="#">
           Fruits
@@ -59,14 +59,31 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link px-4 rounded-pill" href="#">
-                Liên hệ
-              </a>
+            <Link href="/contact">
+                <a
+                  className={
+                    "nav-link px-4 rounded-pill" + getSidebarClass("/contact")
+                  }
+                  aria-current="page"
+                  href="#"
+                >
+                  Liên hệ
+                </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link px-4 rounded-pill" href="#">
-                Giới thiệu
-              </a>
+            <Link href="/about">
+                <a
+                  className={
+                    "nav-link px-4 rounded-pill" + getSidebarClass("/about")
+                  }
+                  aria-current="page"
+                  href="#"
+                >
+                  Giới thiệu
+                </a>
+              </Link>
+              
             </li>
           </ul>
           <div className="d-flex justify-content-center align-items-center">

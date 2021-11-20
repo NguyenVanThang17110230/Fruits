@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
   return getLayout(
     <>
       <Head>
-        <title>My page title</title>
+        <title>Fruits</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Component {...pageProps} />
