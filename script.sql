@@ -22,7 +22,7 @@ CREATE TABLE employee (
     phone_number varchar(10),
     address nvarchar(100),
     email varchar(50),
-    role int
+    role VARCHAR(50)
 );
 
 CREATE TABLE supplier (
@@ -60,7 +60,7 @@ CREATE TABLE customer (
     phone_number varchar(10),
     address nvarchar(100),
     email varchar(50),
-    role int
+    role VARCHAR(50)
 );
 
 CREATE TABLE promotion (
