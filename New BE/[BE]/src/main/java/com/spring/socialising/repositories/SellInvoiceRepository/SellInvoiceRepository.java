@@ -9,4 +9,8 @@ import java.math.BigDecimal;
 public interface SellInvoiceRepository extends JpaRepository<SellInvoiceEntity, Long> {
     @Query("SELECT SUM(total_price) FROM SellInvoiceEntity")
     BigDecimal getTotalInvoiceValue();
+
+    @Query("UPDATE SellInvoiceEntity SET status = 1 where id=:id")
+    SellInvoiceEntity changeStatusToFinished(Long id);
+
 }

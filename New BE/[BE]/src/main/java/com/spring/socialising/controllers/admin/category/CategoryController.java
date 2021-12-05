@@ -23,7 +23,7 @@ public class CategoryController {
                 .success(true)
                 .message("List category")
                 .data(categoryService.findAll())
-                .build(),BAD_REQUEST);
+                .build(),OK);
     }
 
     @ApiOperation("Get category by id")
