@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -24,6 +25,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public SellInvoiceEntity findById(Long id) {
+        Optional<SellInvoiceEntity> sellInvoiceFound = sellInvoiceRepository.findById(id);
+        if(sellInvoiceFound.isPresent()){
+            return sellInvoiceFound.get();
+        }
+        return null;
+    }
+
+    @Override
     public List<SellInvoiceDetailsEntity> findAllDetailById(Long id) {
         return sellInvoiceDetailRepository.findListByIdSell(id);
     }
@@ -31,5 +41,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public SellInvoiceEntity changeStatusToFinished(Long id) {
         return sellInvoiceRepository.changeStatusToFinished(id);
+    }
+
+    @Override
+    public SellInvoiceEntity updateSellInvoice(SellInvoiceEntity sellInvoiceEntity) {
+        return sellInvoiceRepository.save(sellInvoiceEntity);
     }
 }

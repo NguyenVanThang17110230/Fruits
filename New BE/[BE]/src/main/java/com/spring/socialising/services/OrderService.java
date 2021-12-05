@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface OrderService {
     List<SellInvoiceEntity> findAll();
+    SellInvoiceEntity findById(Long id);
     List<SellInvoiceDetailsEntity> findAllDetailById(Long id);
     SellInvoiceEntity changeStatusToFinished(Long id);
+    SellInvoiceEntity updateSellInvoice(SellInvoiceEntity sellInvoiceEntity);
 }

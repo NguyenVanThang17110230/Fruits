@@ -24,7 +24,7 @@ public class SupplierController {
                 .success(true)
                 .message("List supplier")
                 .data(supplierService.findAll())
-                .build(),BAD_REQUEST);
+                .build(),OK);
     }
 
     @ApiOperation("Get supplier by id")
