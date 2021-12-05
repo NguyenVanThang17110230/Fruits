@@ -1,8 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { CartState } from "../context/Context";
 
 const Header = () => {
+  const {state:{cart}} = CartState();
+  console.log('state-cart', cart);
   const router = useRouter();
   const getSidebarClass = (path) => {
     const matched =
@@ -88,10 +91,10 @@ const Header = () => {
           </ul>
           <div className="d-flex justify-content-center align-items-center">
             <Link href="/shopping-cart">
-              <a href="#">
+              <a href="#" className="position-relative me-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-shopping-cart me-3"
+                  className="icon icon-tabler icon-tabler-shopping-cart"
                   width={26}
                   height={26}
                   viewBox="0 0 24 24"
@@ -107,10 +110,12 @@ const Header = () => {
                   <path d="M17 17h-11v-14h-2" />
                   <path d="M6 5l14 1l-1 7h-13" />
                 </svg>
+                <div className="bg-danger text-white rounded-circle position-absolute d-flex align-items-center justify-content-center" style={{width:'18px',height:'18px',fontSize:'9px',top:'-5px',right:'-5px'}}>{cart.length}</div>
               </a>
             </Link>
-
-            <div className="btn btn-outline-success">Login</div>
+            <Link href="/login">
+              <a className="btn btn-outline-success">Login</a>
+            </Link>
           </div>
         </div>
       </div>
