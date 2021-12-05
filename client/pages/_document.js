@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-sync-scripts */
-import Document, { Html, Head, Main, NextScript, } from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -16,6 +16,11 @@ class MyDocument extends Document {
             rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossOrigin="anonymous"
+          />
+          <link
+            href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+            rel="stylesheet"
+            
           />
         </Head>
         <body>

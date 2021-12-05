@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
 
 import User from "../../layouts/User";
+import { getCookie } from "../../cookie/cookie";
+import { CartState } from "../../context/Context";
+const CARD = "CARD"
+
 
 const ShoppingCart = () => {
+  const {
+    state: { cart },
+    dispatch,
+  } = CartState();
+
+  const decrement = (data,quantity) =>{
+    console.log('data',data);
+    console.log('quantity',quantity);
+    if(quantity === 1){
+      alert('khong dc giam nua')
+    }
+    else{
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: { product: data, quantity: - 0.5 },
+      });
+    }
+  }
+
+  const countMoney = (cart,money) =>{
+    
+    return cart[0].quantity*money
+  }
+
   return (
     <div className="container my-5">
       <div className="row">
@@ -21,80 +49,63 @@ const ShoppingCart = () => {
                     Loại trái cây
                 </div>
                 
-                <div className="col-4">
+                <div className="col-2">
                     Số lượng
                 </div>
                 <div className="col-2">
-                    Giá
+                    Đơn Giá
+                </div>
+                <div className="col-2">
+                    Tổng tiền
                 </div>
             </div>
-            <div className="card p-2 mb-2">
+            {cart && cart.length >0?<><div className="card p-2 mb-2">
               <div className="row">
                 <div className="col-2">
                   <img src="/static/images/bo.jpg" className="w-100" alt="" />
                 </div>
                 <div className="col-2 d-flex align-items-center">Bơ nam mỹ</div>
                 <div className="col-2 d-flex align-items-center">Bơ</div>
-                <div className="col-4 d-flex align-items-center">
+                <div className="col-2 d-flex align-items-center">
                   <div className="d-flex">
                     <div
-                      className="px-3 py-1 fs-4 border border-dark border-end-0 d-flex align-items-center justify-content-center"
+                      className="px-2 py-1 fs-4 border border-dark border-end-0 d-flex align-items-center justify-content-center"
                       style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        dispatch({
+                          type: "ADD_TO_CART",
+                          payload: { product: "sp1", quantity: 0.5 },
+                        });
+                      }}
                     >
                       +
                     </div>
                     <input
                       type="text"
                       name="count"
-                      value="2"
-                      className="ps-3"
-                      style={{ width: "50px" }}
+                      value={cart[0].quantity}
+                      className=""
+                      style={{ width: "40px" }}
+                      
                     />
                     <div
-                      className="px-3 py-1 border border-dark border-start-0 fs-3"
+                      className="px-2 py-1 border border-dark border-start-0 fs-3"
                       style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        decrement("sp1",cart[0].quantity)
+                        
+                      }}
                     >
                       -
                     </div>
                   </div>
                 </div>
                 <div className="col-2 d-flex align-items-center">250.000đ</div>
+                <div className="col-2 d-flex align-items-center">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(countMoney(cart,250000))}</div>
               </div>
             </div>
-            <div className="card p-2 mb-2">
-              <div className="row">
-                <div className="col-2">
-                  <img src="/static/images/bo.jpg" className="w-100" alt="" />
-                </div>
-                <div className="col-2 d-flex align-items-center">Bơ nam mỹ</div>
-                <div className="col-2 d-flex align-items-center">Bơ</div>
-                <div className="col-4 d-flex align-items-center">
-                  <div className="d-flex">
-                    <div
-                      className="px-3 py-1 fs-4 border border-dark border-end-0 d-flex align-items-center justify-content-center"
-                      style={{ cursor: "pointer" }}
-                    >
-                      +
-                    </div>
-                    <input
-                      type="text"
-                      name="count"
-                      value="2"
-                      className="ps-3"
-                      style={{ width: "50px" }}
-                    />
-                    <div
-                      className="px-3 py-1 border border-dark border-start-0 fs-3"
-                      style={{ cursor: "pointer" }}
-                    >
-                      -
-                    </div>
-                  </div>
-                </div>
-                <div className="col-2 d-flex align-items-center">250.000đ</div>
-              </div>
-            </div>
-            <h5>Tổng tiền: <span className="fw-normal">250.000đ</span> </h5>
+            <h5 className="mt-2">Tổng tiền: <span className="fw-normal">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(countMoney(cart,250000))}</span> </h5></>:<div>khong co gi</div>}
+            
           </div>
         </div>
         <div className="col-4">

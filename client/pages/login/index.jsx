@@ -1,6 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import { Formik, Field, Form } from "formik";
+import toastr from "toastr";
+
 const Login = () => {
+  const handleLogin = (values, option) => {
+    console.log("values",values);
+    toastr.success('ihhihihihii')
+  };
   return (
     <div
       className="p-5 min-vh-100 justify-content-center align-items-center d-flex"
@@ -24,7 +31,60 @@ const Login = () => {
               <div className="h-100 w-100">
                 <div className="card-body text-center">
                   <h3 className="mb-5">Chào mừng bạn quay trở lại!</h3>
-                  <div className="form-outline mb-4">
+                  <Formik
+                    initialValues={{
+                      email: "",
+                      password: "",
+                    }}
+                    onSubmit={handleLogin}
+                  >
+                    {(props) => (
+                      <Form onSubmit={props.handleSubmit}>
+                        <div className="form-outline mb-4">
+                          <Field
+                            id="email"
+                            type="text"
+                            name="email"
+                            className="form-control form-control-lg rounded-pill fs-6"
+                            placeholder="Tài khoản"
+                            style={{
+                              paddingBottom: "0.7rem",
+                              paddingTop: "0.7rem",
+                            }}
+                          />
+                        </div>
+                        <div className="form-outline mb-4">
+                          <Field
+                            id="password"
+                            type="password"
+                            name="password"
+                            className="form-control form-control-lg rounded-pill fs-6"
+                            placeholder="Mật khẩu"
+                            style={{
+                              paddingBottom: "0.7rem",
+                              paddingTop: "0.7rem",
+                            }}
+                          />
+                        </div>
+                        <button
+                          className="btn btn-primary btn-lg w-100 rounded-pill fs-6"
+                          type="submit"
+                        >
+                          Đăng nhập
+                        </button>
+                        <hr className="my-4" />
+                        <div className="d-flex flex-column">
+                          <Link className="text-decoration-none mb-2" href="#">
+                            Quên mật khẩu?
+                          </Link>
+                          <Link className="text-decoration-none" href="/signup">
+                            Đăng ký tài khoản mới!
+                          </Link>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                  {/* <div className="form-outline mb-4">
                     <input
                       type="email"
                       id="typeEmailX-2"
@@ -47,22 +107,7 @@ const Login = () => {
                         paddingTop: "0.7rem",
                       }}
                     />
-                  </div>
-                  <button
-                    className="btn btn-primary btn-lg w-100 rounded-pill fs-6"
-                    type="submit"
-                  >
-                    Đăng nhập
-                  </button>
-                  <hr className="my-4" />
-                  <div className="d-flex flex-column">
-                    <Link className="text-decoration-none mb-2" href="#">
-                      Quên mật khẩu?
-                    </Link>
-                    <Link className="text-decoration-none" href="/signup">
-                      Đăng ký tài khoản mới!
-                    </Link>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

@@ -137,6 +137,42 @@ const SidebarAdmin = () => {
             </Link>
           </li>
           <li className="nav-item px-2">
+            <Link href="/admin/import">
+              <a
+                id="side-bar-ad"
+                className={
+                  "d-flex align-items-center nav-link px-4 rounded-3 text-white" +
+                  getSidebarClass("/admin/import")
+                }
+                aria-current="page"
+                href="#"
+                style={{
+                  paddingTop: "0.9rem",
+                  paddingBottom: "0.9rem",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-license me-2"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="#ffffff"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M15 21h-9a3 3 0 0 1 -3 -3v-1h10v2a2 2 0 0 0 4 0v-14a2 2 0 1 1 2 2h-2m2 -4h-11a3 3 0 0 0 -3 3v11" />
+                  <line x1={9} y1={7} x2={13} y2={7} />
+                  <line x1={9} y1={11} x2={13} y2={11} />
+                </svg>
+                Hóa đơn nhập
+              </a>
+            </Link>
+          </li>
+          <li className="nav-item px-2">
             <Link href="/admin/category">
               <a
                 id="side-bar-ad"
@@ -173,6 +209,42 @@ const SidebarAdmin = () => {
             </Link>
           </li>
           <li className="nav-item px-2">
+            <Link href="/admin/supplier">
+              <a
+                id="side-bar-ad"
+                className={
+                  "d-flex align-items-center nav-link px-4 rounded-3 text-white" +
+                  getSidebarClass("/admin/supplier")
+                }
+                aria-current="page"
+                href="#"
+                style={{
+                  paddingTop: "0.9rem",
+                  paddingBottom: "0.9rem",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-circles me-2"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="#ffffff"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <circle cx={12} cy={7} r={4} />
+                  <circle cx="6.5" cy={17} r={4} />
+                  <circle cx="17.5" cy={17} r={4} />
+                </svg>
+                Nhà cung cấp
+              </a>
+            </Link>
+          </li>
+          <li className="nav-item px-2">
             <Link href="/admin/gift">
               <a
                 id="side-bar-ad"
@@ -205,7 +277,7 @@ const SidebarAdmin = () => {
                   <path d="M19 12v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7" />
                   <path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" />
                 </svg>
-                Quà tặng
+                Khuyến mãi
               </a>
             </Link>
           </li>

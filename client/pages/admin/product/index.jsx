@@ -8,6 +8,7 @@ const AdminProduct = () => {
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [imageView, setImageView] = useState("");
+  const [listProduct, setListProduct] = useState([]);
   const toggle = () => {
     setModal(!modal);
   };
@@ -15,7 +16,7 @@ const AdminProduct = () => {
     setIsEdit(!isEdit);
   };
   const handleAddNewProduct = async (values, actions) => {
-    console.log("values", values);
+    console.log("values111", values);
   };
   const onChangeValueImage = (data) => {
     if (data) {
@@ -24,14 +25,44 @@ const AdminProduct = () => {
 
       reader.onload = function (e) {
         console.log("data12", e.target.result);
-
         setImageView(e.target.result);
-
         a.src = e.target.result;
       }.bind(this);
       reader.readAsDataURL(data);
     }
   };
+
+  // const converBase64Image = (data) =>{
+  //   if (data) {
+  //     let seft = this
+  //     var reader = new FileReader();
+  //     var rerult = "";
+  //     reader.onloadend = function (e) {
+  //       console.log("data12", e.target.result);
+  //       rerult = e.target.result;
+  //       return seft.rerult;
+  //     }.bind(this);
+  //     reader.readAsDataURL(data);
+  //     // return rerult;
+  //   }
+  // }
+
+  const setAddListProduct = (values) => {
+    console.log("values", values);
+    const valuesNew = {
+      name: values.name,
+      image: imageView,
+      quantity: values.quantity,
+      type: values.type,
+      importPrice: values.importPrice,
+      price: values.price,
+      description: values.description,
+    };
+    const newList = [...listProduct, valuesNew];
+    setListProduct(newList);
+  };
+  console.log("listProduct", listProduct);
+
   const addProductModal = () => {
     return (
       <Modal isOpen={modal} toggle={toggle}>
@@ -43,6 +74,7 @@ const AdminProduct = () => {
               image: null,
               quantity: "",
               type: "",
+              importPrice: "",
               price: "",
               description: "",
             }}
@@ -67,10 +99,10 @@ const AdminProduct = () => {
                             className="form-control fileupload"
                             type="file"
                             onChange={(event) => {
-                              props.setFieldValue(
-                                "image",
-                                event.currentTarget.files[0]
-                              );
+                              // props.setFieldValue(
+                              //   "image",
+                              //   converBase64Image(event.currentTarget.files[0])
+                              // );
                               onChangeValueImage(event.currentTarget.files[0]);
                             }}
                           />
@@ -79,13 +111,13 @@ const AdminProduct = () => {
                             alt="main-image"
                             src="/static/images/bo.jpg"
                           />
-                          <button
-                            className="bg-pink px-4 py-3 rounded-3 border-0 text-white mt-3"
-                            type="submit"
-                            disabled={props.isSubmitting}
+
+                          <div
+                            className="bg-success px-4 py-3 rounded-3 border-0 text-white mt-3"
+                            onClick={() => setAddListProduct(props.values)}
                           >
-                            Nhập hàng
-                          </button>
+                            Thêm sản phẩm
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -139,21 +171,43 @@ const AdminProduct = () => {
                           type="text"
                         />
                       </div>
-                      <div className="mb-4">
-                        <label
-                          className="block text-gray-700 text-sm font-bold mb-2"
-                          htmlFor="price"
-                        >
-                          Giá bán
-                        </label>
-                        <Field
-                          id="price"
-                          name="price"
-                          placeholder="Giá bán"
-                          className="form-control"
-                          type="text"
-                        />
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="mb-4">
+                            <label
+                              className="block text-gray-700 text-sm font-bold mb-2"
+                              htmlFor="price"
+                            >
+                              Giá bán
+                            </label>
+                            <Field
+                              id="price"
+                              name="price"
+                              placeholder="Giá bán"
+                              className="form-control"
+                              type="text"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="mb-4">
+                            <label
+                              className="block text-gray-700 text-sm font-bold mb-2"
+                              htmlFor="price"
+                            >
+                              Giá nhập
+                            </label>
+                            <Field
+                              id="importPrice"
+                              name="importPrice"
+                              placeholder="Giá nhập"
+                              className="form-control"
+                              type="text"
+                            />
+                          </div>
+                        </div>
                       </div>
+
                       <div className="mb-4">
                         <label
                           className="block text-gray-700 text-sm font-bold mb-2"
@@ -171,7 +225,50 @@ const AdminProduct = () => {
                         />
                       </div>
                     </div>
+                    <div className="col-12">
+                      <h4>Danh sách sản phẩm nhập:</h4>
+                      <table className="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">Hình ảnh</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Loại trái cây</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Giá bán</th>
+                            <th scope="col">Giá nhập</th>
+                            <th scope="col">Mô tả</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {listProduct.length > 0 &&
+                            listProduct.map((data, index) => (
+                              <tr key={index} style={{ cursor: "pointer" }}>
+                                <th scope="row">
+                                  <img
+                                    src={data.image}
+                                    alt=""
+                                    style={{ height: "80px",width:"120px",objectFit:"cover" }}
+                                  />
+                                </th>
+                                <td>{data.name}</td>
+                                <td>{data.type}</td>
+                                <td>{data.quantity} Kg</td>
+                                <td>{data.price} đ/kg</td>
+                                <td>{data.importPrice} đ/kg</td>
+                                <td>{data.description}</td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
+                  <button
+                    className="bg-pink px-4 py-3 rounded-3 border-0 text-white mt-3"
+                    type="submit"
+                    disabled={props.isSubmitting}
+                  >
+                    Nhập hàng
+                  </button>
                 </Form>
               </div>
             )}

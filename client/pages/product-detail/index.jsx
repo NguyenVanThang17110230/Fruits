@@ -3,17 +3,30 @@ import Link from "next/link";
 
 import User from "../../layouts/User";
 import BannerProductDetail from "../../containers/BannerProductDetail";
+import { setCookie } from "../../cookie/cookie";
+import { CartState } from "../../context/Context";
+
+const CARD = "CARD";
 
 const ProductDetail = () => {
   const [count, setCount] = useState(1);
-  const countDown = () =>{
-    if(count === 1){
-      alert("Phai lon hon 1")
+  const countDown = () => {
+    if (count === 1) {
+      alert("Phai lon hon 1");
+    } else {
+      setCount(count - 0.5);
     }
-    else{
-      setCount(count - 0.5)
-    }
-  }
+  };
+
+  const addProductToCart = (value) => {
+    console.log("value", value);
+    setCookie(CARD, value);
+  };
+
+  const {
+    state: { cart },
+    dispatch,
+  } = CartState();
   return (
     <>
       <BannerProductDetail nameP="Bơ nam mỹ" />
@@ -46,7 +59,7 @@ const ProductDetail = () => {
               <input
                 type="text"
                 name="count"
-                value={count}
+                defaultValue={count}
                 className="ps-4"
                 style={{ width: "70px" }}
               />
@@ -54,7 +67,6 @@ const ProductDetail = () => {
                 className="px-4 py-2 border border-dark border-start-0 fs-3"
                 style={{ cursor: "pointer" }}
                 onClick={() => countDown()}
-                
               >
                 -
               </div>
@@ -62,6 +74,13 @@ const ProductDetail = () => {
             <div
               id="add-cart-2"
               className="p-3 bg-warning d-inline-flex align-items-center mt-4"
+              onClick={() => {
+                dispatch({
+                  type: "ADD_TO_CART",
+                  payload: { product: "sp1", quantity: count },
+                });
+              }}
+              style={{cursor:'pointer'}}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

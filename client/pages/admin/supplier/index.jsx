@@ -4,7 +4,8 @@ import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 import Admin from "../../../layouts/Admin";
 
-const AdminGift = () => {
+
+const Supplier = () => {
     const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   
@@ -27,7 +28,7 @@ const AdminGift = () => {
   const addCategoryModal = () => {
     return (
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Thêm khuyến mãi</ModalHeader>
+        <ModalHeader toggle={toggle}>Thêm nhà cung cấp mới</ModalHeader>
         <ModalBody>
           <Formik
             initialValues={{
@@ -44,12 +45,12 @@ const AdminGift = () => {
                       className="block text-gray-700 text-sm font-bold mb-2"
                       htmlFor="name"
                     >
-                      Tên khuyến mãi
+                      Tên nhà cung cấp
                     </label>
                     <Field
                       id="name"
                       name="name"
-                      placeholder="Tên khuyến mãi"
+                      placeholder="Tên nhà cung cấp"
                       className="form-control"
                       type="text"
                     />
@@ -89,7 +90,7 @@ const AdminGift = () => {
   const updateCategoryModal = () => {
     return (
       <Modal isOpen={isEdit} toggle={toggleEdit}>
-        <ModalHeader toggle={toggleEdit}>Cập nhập thông tin khuyến mãi</ModalHeader>
+        <ModalHeader toggle={toggleEdit}>Cập nhập thông tin nhà cung cấp</ModalHeader>
         <ModalBody>
           <Formik
             initialValues={{
@@ -106,12 +107,12 @@ const AdminGift = () => {
                       className="block text-gray-700 text-sm font-bold mb-2"
                       htmlFor="name"
                     >
-                      Tên khuyến mãi
+                      Tên nhà cung cấp
                     </label>
                     <Field
                       id="name"
                       name="name"
-                      placeholder="Tên khuyến mãi"
+                      placeholder="Tên nhà cung cấp"
                       className="form-control"
                       type="text"
                     />
@@ -150,7 +151,7 @@ const AdminGift = () => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center">
-        <h2 className="py-3">Khuyến mãi</h2>
+        <h2 className="py-3">Nhà cung cấp</h2>
         <div
           className="py-3 px-4 bg-pink text-white rounded-pill"
           style={{
@@ -158,14 +159,14 @@ const AdminGift = () => {
           }}
           onClick={() => setModal(true)}
         >
-          Thêm khuyến mãi
+          Thêm nhà cung cấp
         </div>
       </div>
       <table className="table table-bordered table-striped">
         <thead>
           <tr>
             <th scope="col">Mã</th>
-            <th scope="col">Tên khuyến mãi</th>
+            <th scope="col">Tên nhà cung cấp</th>
             <th scope="col">Mô tả</th>
           </tr>
         </thead>
@@ -192,7 +193,7 @@ const AdminGift = () => {
     </>
   );
 }
-AdminGift.getLayout = function getLayout(page) {
+Supplier.getLayout = function getLayout(page) {
     return <Admin>{page}</Admin>;
 };
-export default AdminGift
+export default Supplier
