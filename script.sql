@@ -6,7 +6,7 @@ CREATE TABLE account (
 	id bigint primary key auto_increment,
     username nvarchar(50) not null,
     password nvarchar(50) not null,
-    role int not null,
+    role varchar(50) not null,
     is_active boolean not null,
     created_time date,
     modified_time date
@@ -22,7 +22,7 @@ CREATE TABLE employee (
     phone_number varchar(10),
     address nvarchar(100),
     email varchar(50),
-    role int
+    role VARCHAR(50)
 );
 
 CREATE TABLE supplier (
@@ -60,7 +60,7 @@ CREATE TABLE customer (
     phone_number varchar(10),
     address nvarchar(100),
     email varchar(50),
-    role int
+    role VARCHAR(50)
 );
 
 CREATE TABLE promotion (
@@ -135,8 +135,3 @@ ALTER TABLE sell_invoice_promotion ADD CONSTRAINT fk_sell_invoice_promotion_sell
 ALTER TABLE sell_invoice_details ADD CONSTRAINT fk_sell_invoice_details_sell_invoice FOREIGN KEY (id_sell) REFERENCES sell_invoice(id);
 
 ALTER TABLE sell_invoice_details ADD CONSTRAINT fk_sell_invoice_details_product FOREIGN KEY (id_product) REFERENCES product(id);
-
-
-
-
-
