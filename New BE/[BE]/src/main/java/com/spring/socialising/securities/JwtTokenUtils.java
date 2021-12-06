@@ -52,10 +52,10 @@ public class JwtTokenUtils implements Serializable {
 
     public TokenDetails getTokenDetails(JwtUserDetails userDetails, String avatar) {
         TokenDetails tokenDetails = new TokenDetails();
-        tokenDetails.setFullName(userDetails.getHoTen());
-        tokenDetails.setAvatar(avatar);
+        tokenDetails.setFullName(userDetails.getUsername());
+        tokenDetails.setId(userDetails.getId());
         tokenDetails.setToken(generateToken(userDetails));
-        tokenDetails.setExpired(JWT_TOKEN_VALIDITY);
+        tokenDetails.setExpired(JWT_TOKEN_VALIDITY * 100000);
         tokenDetails.setRoles(userDetails.getAuthorities().stream().map(Object::toString).collect(Collectors.toList()));
         return tokenDetails;
     }
@@ -63,7 +63,7 @@ public class JwtTokenUtils implements Serializable {
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 100000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 

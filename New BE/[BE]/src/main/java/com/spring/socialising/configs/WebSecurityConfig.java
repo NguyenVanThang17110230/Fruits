@@ -58,6 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/rest/admin/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/rest/admin/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/rest/admin/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/rest/user/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.GET, "/rest/user/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.PUT, "/rest/user/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.DELETE, "/rest/user/**").hasAuthority("USER")
                 .anyRequest().permitAll();
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 

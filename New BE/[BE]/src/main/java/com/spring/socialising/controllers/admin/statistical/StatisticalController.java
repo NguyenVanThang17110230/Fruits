@@ -22,7 +22,7 @@ public class StatisticalController {
     public ResponseEntity<ResponseData> getSummaryDataForAdmin(){
         return new ResponseEntity<>(ResponseData.builder()
                 .success(true)
-                .message("Login Successfully")
+                .message("Successfully")
                 .data(statisService.getSummaryStatistical())
                 .build(),OK);
     }

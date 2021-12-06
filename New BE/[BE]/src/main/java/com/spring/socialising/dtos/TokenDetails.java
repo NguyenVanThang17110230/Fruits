@@ -18,7 +18,7 @@ public class TokenDetails {
 
     private String token;
 
-    private String avatar;
+    private String id;
 
     private long expired;
 

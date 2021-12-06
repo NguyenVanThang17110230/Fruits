@@ -10,4 +10,6 @@ public interface ProductService {
     ProductEntity findProductByCode(String code);
     ProductEntity addProduct(ProductEntity productEntity);
     ProductEntity updateProduct(ProductEntity productEntity);
+
+    List<ProductEntity> findProductByCategory(Long id);
 }

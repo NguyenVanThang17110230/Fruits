@@ -1,9 +1,8 @@
 package com.spring.socialising.controllers;
 
-import com.spring.socialising.dtos.AccountDTO;
+import com.spring.socialising.dtos.CustomerDTO;
 import com.spring.socialising.dtos.TokenDetails;
 import com.spring.socialising.entities.response.ResponseData;
-import com.spring.socialising.exceptions.UserNotFoundAuthenticationException;
 import com.spring.socialising.securities.AccountDetailsService;
 import com.spring.socialising.securities.JwtTokenUtils;
 import com.spring.socialising.securities.JwtUserDetails;
@@ -40,7 +39,7 @@ public class AuthenticationController {
 
     @ApiOperation("User login form (phone_number, password)")
     @PostMapping()
-    public ResponseEntity<ResponseData> loginUser(@Valid @RequestBody AccountDTO dto){
+    public ResponseEntity<ResponseData> loginUser(@Valid @RequestBody CustomerDTO dto){
         Locale locale = LocaleContextHolder.getLocale();
         AccountAuthenticationToken authenticationToken = new AccountAuthenticationToken(
                 dto.getUsername(),
@@ -59,7 +58,7 @@ public class AuthenticationController {
                     .message("Login Successfully")
                     .data(result)
                     .build(),OK);
-        }catch (UserNotFoundAuthenticationException | BadCredentialsException ex){
+        }catch (Exception ex){
             return new ResponseEntity<>(ResponseData.builder()
                     .success(false)
                     .message(ex.getMessage())

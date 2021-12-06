@@ -37,20 +37,20 @@ public class AccountDetailsService implements UserDetailsService {
         if(accountFound == null){
             throw new UsernameNotFoundException("User not found");
        }
-        String fullName ="";
+        String id ="";
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByIdAccount(accountFound.getId());
 
         if(customerEntity != null){
-            fullName = customerEntity.getLast_name()+" "+customerEntity.getFirst_name();
+            id = customerEntity.getId().toString();
         }
         else
         {
             EmployeeEntity employeeEntity = employeeRepository.findEmployeeEntitiesByIdAccount(accountFound.getId());
-            fullName = employeeEntity.getLast_name() +" "+employeeEntity.getFirst_name();
+            id = employeeEntity.getId().toString();
         }
 
         return new JwtUserDetails(
-                fullName,
+                id,
                 accountFound.getUsername(),
                 accountFound.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority(accountFound.getRole())),

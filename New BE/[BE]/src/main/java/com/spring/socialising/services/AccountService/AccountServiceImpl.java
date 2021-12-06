@@ -2,22 +2,20 @@ package com.spring.socialising.services.AccountService;
 
 import com.spring.socialising.entities.Account;
 import com.spring.socialising.repositories.AccountRepository.AccountRepository;
-import com.spring.socialising.services.AccountService.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class AccountServiceImpl implements AccountService {
-
-    private final AccountRepository accountRepository;
-
-    public AccountServiceImpl(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Override
+    public Account findAccountByUserName(String username) {
+        return accountRepository.findAccountByUsername(username);
     }
 
     @Override
-    public Account findAccountByPhoneNumber(String phongnumber) {
-        return accountRepository.findAccountByUsername(phongnumber);
+    public Account addAccount(Account account) {
+        return accountRepository.save(account);
     }
 }

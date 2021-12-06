@@ -2,13 +2,16 @@ package com.spring.socialising.controllers.admin.product;
 
 import com.spring.socialising.entities.*;
 import com.spring.socialising.entities.response.ResponseData;
+import com.spring.socialising.securities.JwtUserDetails;
 import com.spring.socialising.services.CategoryService.CategoryService;
 import com.spring.socialising.services.ProductService.ProductService;
 import com.spring.socialising.services.PurchaseInvoice.PurchaseInvoiceService;
 import com.spring.socialising.services.SupplierService.SupplierService;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,49 +67,52 @@ public class ProductController {
         }
     }
 
-    @ApiOperation("Add product")
-    @PostMapping("/add-for-supplier/{id}")
-    @Transactional
-    public ResponseEntity<ResponseData> addProduct(@PathVariable Long id, @RequestBody List<ProductEntity> productList){
-        SupplierEntity supplier = supplierService.findSupplierById(id);
-        if(supplier == null ){
+    @ApiOperation("Add product into system")
+    @PostMapping("/add")
+    public ResponseEntity<ResponseData> addProduct(@RequestBody ProductEntity productEntity){
+        productEntity.setPrice(new BigDecimal(0));
+        productEntity.setAmount(0);
+        productEntity.setPurchase_price(new BigDecimal(0));
+
+        ProductEntity productCode = null;
+        String code = null;
+        do {
+            code = UUID.randomUUID().toString().toLowerCase().replace("-","").substring(0, 6);
+            productCode = productService.findProductByCode(code);
+        } while (productCode != null);
+
+        productEntity.setCode(code);
+        productEntity = productService.addProduct(productEntity);
+
+        if(StringUtils.isEmpty(productEntity.getId().toString())){
             return new ResponseEntity<>(ResponseData.builder()
                     .success(false)
-                    .message("Id supplier is incorrect")
+                    .message("Data in not format")
                     .data(null)
                     .build(),BAD_REQUEST);
         }
+        return new ResponseEntity<>(ResponseData.builder()
+                .success(true)
+                .message("Created")
+                .data(productEntity)
+                .build(),CREATED);
+    }
 
-        //Validate product category
-        for (ProductEntity product: productList) {
-            CategoryEntity category = categoryService.findCategoryById(product.getId_category());
-            if(category == null ){
-                return new ResponseEntity<>(ResponseData.builder()
-                        .success(false)
-                        .message("Id category is incorrect")
-                        .data(null)
-                        .build(),BAD_REQUEST);
-            }
+    @ApiOperation("Purchase product")
+    @PostMapping("/purchase-cargo")
+    @Transactional
+    public ResponseEntity<ResponseData> addPurchase(@RequestBody List<ProductEntity> productList){
+        for(ProductEntity product: productList){
+            ProductEntity productFound = productService.findProductById(product.getId());
+            productFound.setAmount(productFound.getAmount()+product.getAmount());
+            productFound.setPurchase_price(product.getPurchase_price());
+            productFound.setPrice(product.getPrice());
+            productService.updateProduct(productFound);
         }
 
-        //Add product into system
-        ProductEntity productCode = null;
-        String code = null;
-        for (ProductEntity product: productList) {
-                productCode = null;
-                code = null;
-                do {
-                    code = UUID.randomUUID().toString().toLowerCase().replace("-","").substring(0, 6);
-                    productCode = productService.findProductByCode(code);
-                } while (productCode != null);
-
-                product.setCode(code);
-                productService.addProduct(product);
-                System.out.println(product.getId());
-            }
-
+        JwtUserDetails userDetails = (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PurchaseInvoiceEntity purchaseInvoiceEntity = new PurchaseInvoiceEntity();
-        purchaseInvoiceEntity.setId_account(supplier.getId());
+        purchaseInvoiceEntity.setId_account(Long.parseLong(userDetails.getId()));
         purchaseInvoiceEntity.setCode(UUID.randomUUID().toString().toLowerCase().replace("-","").substring(0, 8));
         purchaseInvoiceEntity.setTotal_price(new BigDecimal(0));
         purchaseInvoiceEntity.setCreated_time(LocalDateTime.now());

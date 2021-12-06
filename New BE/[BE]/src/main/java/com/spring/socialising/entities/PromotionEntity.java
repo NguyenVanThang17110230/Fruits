@@ -3,6 +3,7 @@ package com.spring.socialising.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,6 +20,8 @@ public class PromotionEntity {
     private String name;
 
     private String description;
+
+    private BigDecimal price;
 
     private LocalDateTime start_date;
 

@@ -2,7 +2,7 @@ package com.spring.socialising.controllers.admin.order;
 
 import com.spring.socialising.entities.SellInvoiceEntity;
 import com.spring.socialising.entities.response.ResponseData;
-import com.spring.socialising.services.OrderService;
+import com.spring.socialising.services.OrderService.OrderService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

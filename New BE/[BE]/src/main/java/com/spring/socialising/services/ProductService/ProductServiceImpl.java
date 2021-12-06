@@ -43,4 +43,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductEntity updateProduct(ProductEntity productEntity) {
         return productRepository.save(productEntity);
     }
+
+    @Override
+    public List<ProductEntity> findProductByCategory(Long id) {
+        return productRepository.findProductByCategory(id);
+    }
 }

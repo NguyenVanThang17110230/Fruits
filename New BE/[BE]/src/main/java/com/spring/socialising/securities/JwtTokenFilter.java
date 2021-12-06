@@ -1,7 +1,6 @@
 package com.spring.socialising.securities;
-
-import com.spring.socialising.exceptions.UserNotFoundAuthenticationException;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,6 +29,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private MessageSource messageSource;
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = httpServletRequest.getHeader("Authorization");
@@ -40,10 +40,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             Locale locale = LocaleContextHolder.getLocale();
             try {
                 username = jwtTokenUtils.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                throw new UserNotFoundAuthenticationException(messageSource.getMessage("error.gettoken", null, locale));
-            } catch (ExpiredJwtException e) {
-                throw new UserNotFoundAuthenticationException(messageSource.getMessage("error.tokenexpired", null, locale));
+            } catch (Exception ex) {
+                throw new Exception("Current user login not found or token expried");
             }
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

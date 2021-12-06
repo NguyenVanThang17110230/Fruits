@@ -9,13 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
-/**
- * Created by: IntelliJ IDEA
- * User      : thangpx
- * Date      : 3/31/21
- * Time      : 15:53
- * Filename  : AuditingConfig
- */
 @Configuration
 public class AuditingConfig implements AuditorAware<String> {
     @Override

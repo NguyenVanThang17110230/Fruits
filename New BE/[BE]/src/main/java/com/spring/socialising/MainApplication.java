@@ -4,7 +4,6 @@ import com.spring.socialising.entities.Account;
 import com.spring.socialising.entities.EmployeeEntity;
 import com.spring.socialising.repositories.AccountRepository.AccountRepository;
 import com.spring.socialising.repositories.EmployeeRepository.EmployeeRepository;
-import com.spring.socialising.services.AccountService.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
