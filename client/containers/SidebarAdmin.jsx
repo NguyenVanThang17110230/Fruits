@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const SidebarAdmin = () => {
   const router = useRouter();
@@ -11,6 +12,11 @@ const SidebarAdmin = () => {
         : router.pathname.match(new RegExp(`^${path}($|/.*)`));
     return matched ? " bg-pink" : "";
   };
+
+  const logout = () =>{
+    Cookies.remove('token')
+    router.replace('/login')
+  }
   return (
     <div
       className="bg-primary w-100 h-100"
@@ -137,12 +143,12 @@ const SidebarAdmin = () => {
             </Link>
           </li>
           <li className="nav-item px-2">
-            <Link href="/admin/import">
+            <Link href="/admin/purchase">
               <a
                 id="side-bar-ad"
                 className={
                   "d-flex align-items-center nav-link px-4 rounded-3 text-white" +
-                  getSidebarClass("/admin/import")
+                  getSidebarClass("/admin/purchase")
                 }
                 aria-current="page"
                 href="#"
@@ -286,6 +292,7 @@ const SidebarAdmin = () => {
           <div
             className="py-2 text-white w-100 px-4 text-center bg-pink rounded-3 d-flex align-items-center justify-content-center"
             style={{ cursor: "pointer" }}
+            onClick={()=> logout()}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

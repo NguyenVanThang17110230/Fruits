@@ -1,10 +1,39 @@
-import React from "react";
+import React,{ useState, useEffect} from "react";
 import Admin from "../../layouts/Admin";
+import axios from "axios";
+import toastr from "toastr";
+import Cookies from "js-cookie";
 
 const Dashboard = () => {
+  
+  const [token] = useState(Cookies.get("token"));
+  const [statistic,setStatistic] = useState([])
+  
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    try {
+ 
+      const res = await axios.get(
+        "https://33ee-14-186-59-143.ngrok.io/rest/admin/statis",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const statistic = res.data.data;
+      setStatistic(statistic);
+    } catch (error) {
+  
+      toastr.error("Lấy thông tin thống kê thất bại!");
+    }
+  };
   return (
     <>
-    <h2 className="py-3">Dashboard</h2>
+    <h2 className="py-3">Thống kê</h2>
       <div className="row">
         <div className="col-3 px-2">
           <div className="card shadow-md p-3" style={{ borderRadius: "10px" }}>
@@ -34,7 +63,7 @@ const Dashboard = () => {
               </div>
               <div className="text-end">
                 <p className="text-secondary fs-5">Số lượng user</p>
-                <p className="fw-bolder fs-4">50</p>
+                <p className="fw-bolder fs-4">{statistic.countCustomer}</p>
               </div>
             </div>
           </div>
@@ -66,7 +95,7 @@ const Dashboard = () => {
               </div>
               <div className="text-end">
                 <p className="text-secondary fs-5">Số lượng SP</p>
-                <p className="fw-bolder fs-4">20</p>
+                <p className="fw-bolder fs-4">{statistic.countProduct}</p>
               </div>
             </div>
           </div>
@@ -98,7 +127,7 @@ const Dashboard = () => {
               </div>
               <div className="text-end">
                 <p className="text-secondary fs-5">Số lượng ĐH</p>
-                <p className="fw-bolder fs-4">45</p>
+                <p className="fw-bolder fs-4">{statistic.countOrderInvoice}</p>
               </div>
             </div>
           </div>
@@ -130,7 +159,12 @@ const Dashboard = () => {
               </div>
               <div className="text-end">
                 <p className="text-secondary fs-5">Tổng tiền</p>
-                <p className="fw-bolder fs-4">$28.500.000</p>
+                <p className="fw-bolder fs-4">
+                  {statistic.totalPriceOrderValue && new Intl.NumberFormat("de-DE", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(statistic.totalPriceOrderValue)}
+                  </p>
               </div>
             </div>
           </div>
@@ -139,7 +173,11 @@ const Dashboard = () => {
     </>
   );
 };
+
 Dashboard.getLayout = function getLayout(page) {
   return <Admin>{page}</Admin>;
 };
+
+
+
 export default Dashboard;

@@ -1,23 +1,69 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import toastr from "toastr";
 
-import styles from "../styles/Home.module.css";
+
 import User from "../layouts/User";
 import Banner from "../containers/Banner";
+import restConnector from "../axios/configAxios";
+import { CartState } from "../context/Context";
 
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modal: false,
-      username: "",
-      password: "",
-    };
-  }
+const Home = () => {
+  const [token] = useState(Cookies.get("token"));
+  const [category, setCategory] = useState([]);
+  const [product, setProduct] = useState([]);
+  const {
+    state: { cart },
+    dispatch,
+  } = CartState();
+  useEffect(() => {
+    getCategory();
+    getProduct();
+  }, []);
+  const getProduct = async () => {
+    try {
 
-  _updateField = (field) => (e) => this.setState({ [field]: e.target.value });
-  render() {
+      const res = await restConnector.get("/product/list");
+
+      const product = res.data.data;
+      product = product.slice(0,6)
+      setProduct(product);
+    } catch (error) {
+      toastr.error("Lấy thông tin loại trái cây thất bại!");
+    }
+  };
+  const addToCart = (data) => {
+    if (data.amount < 1) {
+      toastr.warning("Không đủ sản phẩm trong kho!");
+    } else {
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: { id: data.id, amount: 1 },
+      });
+      toastr.success("Đã thêm sản phẩm vào giỏ hàng")
+    }
+  };
+  const getCategory = async () => {
+    try {
+
+      const res = await restConnector.get("/category/list");
+
+      const category = res.data.data;
+      setCategory(category);
+    } catch (error) {
+      toastr.error("Lấy thông tin loại trái cây thất bại!");
+    }
+  };
+  const viewCategory = (id) => {
+    const categoryFind = category.find((x) => x.id == id);
+    if (categoryFind) {
+      return categoryFind.name;
+    }
+  };
+ 
+  
     return (
       <>
         <Head>
@@ -28,263 +74,60 @@ export default class Home extends Component {
         <Banner />
         <div className="container my-5">
           <h1 className="text-center mb-5">Các sản phẩm của cửa hàng</h1>
-          <div className="row">
-            <div className="col-4 mb-4">
-              <div id="card-pr" className="card h-100">
-                <div className="w-100" style={{ height: "300px" }}>
-                  <img
-                    src="/static/images/bo.jpg"
-                    className="card-img-top"
-                    alt="..."
-                    style={{ height: "100%" }}
-                  />
-                </div>
+          {product.length>0?<div className="row">
+          {product.length > 0 &&
+                product.map((data, index) => (
+                  <div key={index} className="col-4 mb-4">
+                    <div id="card-pr" className="card h-100">
+                      <div className="w-100" style={{ height: "300px" }}>
+                        <img
+                          src={data.image}
+                          className="card-img-top"
+                          alt="..."
+                          style={{ height: "100%" }}
+                        />
+                      </div>
 
-                <div className="card-body text-center">
-                  <span className="card-text text-secondary fw-light">Bơ</span>
-                  <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
-                  <Link href="/product-detail?id=1">
-                        <a href="#">Xem chi tiết</a>
-                  </Link>
-                  <div
-                    id="add-cart"
-                    href="#"
-                    className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-shopping-cart me-2"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx={6} cy={19} r={2} />
-                      <circle cx={17} cy={19} r={2} />
-                      <path d="M17 17h-11v-14h-2" />
-                      <path d="M6 5l14 1l-1 7h-13" />
-                    </svg>
-                    Thêm vào giỏ hàng
+                      <div className="card-body text-center">
+                        <span className="card-text text-secondary fw-light">
+                          {viewCategory(data.id_category)}
+                        </span>
+                        <p className="card-text fw-bolder fs-4">{data.name}</p>
+                        <Link href={`/product-detail?id=${data.id}`}>
+                          <a href="#">Xem chi tiết</a>
+                        </Link>
+                        <div
+                          id="add-cart"
+                          href="#"
+                          className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
+                          onClick={() =>addToCart(data)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="icon icon-tabler icon-tabler-shopping-cart me-2"
+                            width={40}
+                            height={40}
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="#2c3e50"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <circle cx={6} cy={19} r={2} />
+                            <circle cx={17} cy={19} r={2} />
+                            <path d="M17 17h-11v-14h-2" />
+                            <path d="M6 5l14 1l-1 7h-13" />
+                          </svg>
+                          Thêm vào giỏ hàng
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-4 mb-4">
-              <div id="card-pr" className="card h-100">
-                <div className="w-100" style={{ height: "300px" }}>
-                  <img
-                    src="/static/images/dudu.jpg"
-                    className="card-img-top"
-                    alt="..."
-                    style={{ height: "100%" }}
-                  />
-                </div>
-
-                <div className="card-body text-center">
-                  <span className="card-text text-secondary fw-light">Bơ</span>
-                  <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
-                  <div
-                    id="add-cart"
-                    href="#"
-                    className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-shopping-cart me-2"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx={6} cy={19} r={2} />
-                      <circle cx={17} cy={19} r={2} />
-                      <path d="M17 17h-11v-14h-2" />
-                      <path d="M6 5l14 1l-1 7h-13" />
-                    </svg>
-                    Thêm vào giỏ hàng
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-4 mb-4">
-              <div id="card-pr" className="card h-100">
-                <div className="w-100" style={{ height: "300px" }}>
-                  <img
-                    src="/static/images/dau-tay.jpg"
-                    className="card-img-top"
-                    alt="..."
-                    style={{ height: "100%" }}
-                  />
-                </div>
-
-                <div className="card-body text-center">
-                  <span className="card-text text-secondary fw-light">Bơ</span>
-                  <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
-                  <div
-                    id="add-cart"
-                    href="#"
-                    className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-shopping-cart me-2"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx={6} cy={19} r={2} />
-                      <circle cx={17} cy={19} r={2} />
-                      <path d="M17 17h-11v-14h-2" />
-                      <path d="M6 5l14 1l-1 7h-13" />
-                    </svg>
-                    Thêm vào giỏ hàng
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-4 mb-4">
-              <div id="card-pr" className="card h-100">
-                <div className="w-100" style={{ height: "300px" }}>
-                  <img
-                    src="/static/images/mit.jpg"
-                    className="card-img-top"
-                    alt="..."
-                    style={{ height: "100%" }}
-                  />
-                </div>
-
-                <div className="card-body text-center">
-                  <span className="card-text text-secondary fw-light">Bơ</span>
-                  <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
-                  <div
-                    id="add-cart"
-                    href="#"
-                    className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-shopping-cart me-2"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx={6} cy={19} r={2} />
-                      <circle cx={17} cy={19} r={2} />
-                      <path d="M17 17h-11v-14h-2" />
-                      <path d="M6 5l14 1l-1 7h-13" />
-                    </svg>
-                    Thêm vào giỏ hàng
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-4 mb-4">
-              <div id="card-pr" className="card h-100">
-                <div className="w-100" style={{ height: "300px" }}>
-                  <img
-                    src="/static/images/nho1.jpg"
-                    className="card-img-top"
-                    alt="..."
-                    style={{ height: "100%" }}
-                  />
-                </div>
-
-                <div className="card-body text-center">
-                  <span className="card-text text-secondary fw-light">Bơ</span>
-                  <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
-                  <div
-                    id="add-cart"
-                    href="#"
-                    className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-shopping-cart me-2"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx={6} cy={19} r={2} />
-                      <circle cx={17} cy={19} r={2} />
-                      <path d="M17 17h-11v-14h-2" />
-                      <path d="M6 5l14 1l-1 7h-13" />
-                    </svg>
-                    Thêm vào giỏ hàng
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-4 mb-4">
-              <div id="card-pr" className="card h-100">
-                <div className="w-100" style={{ height: "300px" }}>
-                  <img
-                    src="/static/images/viet_quat.jpg"
-                    className="card-img-top"
-                    alt="..."
-                    style={{ height: "100%" }}
-                  />
-                </div>
-
-                <div className="card-body text-center">
-                  <span className="card-text text-secondary fw-light">Bơ</span>
-                  <p className="card-text fw-bolder fs-4">Bơ campuchia</p>
-                  <div
-                    id="add-cart"
-                    href="#"
-                    className="p-3 bg-warning position-absolute top-50 start-50 d-flex align-items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-shopping-cart me-2"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx={6} cy={19} r={2} />
-                      <circle cx={17} cy={19} r={2} />
-                      <path d="M17 17h-11v-14h-2" />
-                      <path d="M6 5l14 1l-1 7h-13" />
-                    </svg>
-                    Thêm vào giỏ hàng
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                ))}
+          </div>:<div className="text-center text-success mb-5">Đang lấy thông tin sản phẩm xin đợi trong giây lát...</div>}
+          
           <div className="d-flex justify-content-center">
             <Link href="/product">
               <a
@@ -300,8 +143,11 @@ export default class Home extends Component {
         </div>
       </>
     );
-  }
+  
 }
+
 Home.getLayout = function getLayout(page) {
   return <User>{page}</User>;
 };
+
+export default Home;

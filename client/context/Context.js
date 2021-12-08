@@ -10,6 +10,7 @@ const Context = ({children}) =>{
     
     const [state,dispatch] = useReducer(cartReducer,{
         cart:cart,
+        
     })
 
     return(<Cart.Provider value={{state,dispatch}}>

@@ -1,12 +1,42 @@
 import React from "react";
 import Link from "next/link";
+import axios from "axios"
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+
 import { Formik, Field, Form } from "formik";
 import toastr from "toastr";
+import restConnector from "../../axios/configAxios";
+const BASE_URL = process.env.BASE_API_URL
+const test = process.env.NEXT_PUBLIC_GAID
 
 const Login = () => {
-  const handleLogin = (values, option) => {
-    console.log("values",values);
-    toastr.success('ihhihihihii')
+
+  const router = useRouter();
+  const handleLogin = async(values) => {
+    
+    try {
+      
+      const res = await restConnector.post('/login',values);
+      
+      const user = res.data;
+      
+      Cookies.set('token',user.data.token)
+     
+      const role = user.data.roles[0]
+      
+      if(role === "ADMIN"){
+        router.replace('/admin')
+      }
+      else{
+        router.replace('/')
+      }
+      toastr.success('Đăng nhập thành công')
+    } catch (error) {
+      toastr.error(`${error}`)
+      toastr.error('Sai tài khoản hoặc mật khẩu')
+    }
+    
   };
   return (
     <div
@@ -33,7 +63,7 @@ const Login = () => {
                   <h3 className="mb-5">Chào mừng bạn quay trở lại!</h3>
                   <Formik
                     initialValues={{
-                      email: "",
+                      username: "",
                       password: "",
                     }}
                     onSubmit={handleLogin}
@@ -42,9 +72,9 @@ const Login = () => {
                       <Form onSubmit={props.handleSubmit}>
                         <div className="form-outline mb-4">
                           <Field
-                            id="email"
+                            id="username"
                             type="text"
-                            name="email"
+                            name="username"
                             className="form-control form-control-lg rounded-pill fs-6"
                             placeholder="Tài khoản"
                             style={{
@@ -74,9 +104,6 @@ const Login = () => {
                         </button>
                         <hr className="my-4" />
                         <div className="d-flex flex-column">
-                          <Link className="text-decoration-none mb-2" href="#">
-                            Quên mật khẩu?
-                          </Link>
                           <Link className="text-decoration-none" href="/signup">
                             Đăng ký tài khoản mới!
                           </Link>

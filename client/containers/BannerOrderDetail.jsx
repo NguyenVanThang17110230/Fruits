@@ -1,9 +1,9 @@
 import React from "react";
 
-const BannerAbout = () => {
+const BannerOrderDetail = () => {
   return (
     <section
-      id="banner-order-detail"
+      id="banner-about"
       className="position-relative d-flex align-items-center"
     >
       <div className="container">
@@ -11,7 +11,7 @@ const BannerAbout = () => {
           className="fw-bolder text-white card px-4 py-2 d-inline"
           style={{ fontSize: "5rem", backgroundColor: "#0e0d0d73" }}
         >
-          Giới thiệu về chúng tôi
+          Thông tin các đơn hàng
         </div>
       </div>
       <div className="cloud-bn"></div>
@@ -19,4 +19,4 @@ const BannerAbout = () => {
   );
 };
 
-export default BannerAbout;
+export default BannerOrderDetail;

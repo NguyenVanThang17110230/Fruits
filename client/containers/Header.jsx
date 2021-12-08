@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+
 import { CartState } from "../context/Context";
 
 const Header = () => {
-  const {state:{cart}} = CartState();
-  console.log('state-cart', cart);
-  const router = useRouter();
+  const router = useRouter()
+  const [token] = useState(Cookies.get("token"));
+  const {
+    state: { cart },
+  } = CartState();
   const getSidebarClass = (path) => {
     const matched =
       path === "admin"
@@ -14,6 +18,11 @@ const Header = () => {
         : router.pathname.match(new RegExp(`^${path}($|/.*)`));
     return matched ? " bg-success text-white" : "";
   };
+
+  const logout = () =>{
+    Cookies.remove('token')
+    router.replace('/login')
+  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
@@ -62,7 +71,7 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-            <Link href="/contact">
+              <Link href="/contact">
                 <a
                   className={
                     "nav-link px-4 rounded-pill" + getSidebarClass("/contact")
@@ -75,7 +84,7 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-            <Link href="/about">
+              <Link href="/about">
                 <a
                   className={
                     "nav-link px-4 rounded-pill" + getSidebarClass("/about")
@@ -86,7 +95,6 @@ const Header = () => {
                   Giới thiệu
                 </a>
               </Link>
-              
             </li>
           </ul>
           <div className="d-flex justify-content-center align-items-center">
@@ -110,12 +118,46 @@ const Header = () => {
                   <path d="M17 17h-11v-14h-2" />
                   <path d="M6 5l14 1l-1 7h-13" />
                 </svg>
-                <div className="bg-danger text-white rounded-circle position-absolute d-flex align-items-center justify-content-center" style={{width:'18px',height:'18px',fontSize:'9px',top:'-5px',right:'-5px'}}>{cart.length}</div>
+                <div
+                  className="bg-danger text-white rounded-circle position-absolute d-flex align-items-center justify-content-center"
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    fontSize: "9px",
+                    top: "-5px",
+                    right: "-5px",
+                  }}
+                >
+                  {cart.length}
+                </div>
               </a>
             </Link>
-            <Link href="/login">
-              <a className="btn btn-outline-success">Login</a>
-            </Link>
+            {token !== undefined ? (
+              <div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
+              <ul className="navbar-nav">
+                <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img
+                    className="rounded-pill"
+                    style={{ objectFit: "cover" }}
+                    src="/static/images/dau-tay.jpg"
+                    width={40}
+                    height={40}
+                    alt=""
+                  />
+                  </a>
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
+                    <li onClick={()=>logout()}><a className="dropdown-item" href="#">Đăng xuất</a></li>
+                    <li> <Link href="/order-detail"><a className="dropdown-item" href="#">Thông tin đơn hàng</a></Link></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            ) : (
+              <Link href="/login">
+                <a className="btn btn-outline-success">Login</a>
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
+import axios from "axios";
+import toastr from "toastr";
+import Cookies from "js-cookie";
 
 import Admin from "../../../layouts/Admin";
 
+const BASE_URL = process.env.BASE_URL
+
 const AdminCategory = () => {
+
+  const [token] = useState(Cookies.get("token"));
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [dataEditCategory,setDataEditCategory] = useState([])
+
   
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const toggle = () => {
     setModal(!modal);
   };
@@ -16,13 +31,66 @@ const AdminCategory = () => {
     setIsEdit(!isEdit);
   };
 
-  const handleAddNewCategory = async (values, actions) => {
-    console.log("values", values);
+  const getData = async () => {
+    try {
+
+      const res = await axios.get(
+        "https://33ee-14-186-59-143.ngrok.io/rest/admin/category/list",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const category = res.data.data;
+      setCategory(category);
+    } catch (error) {
+      toastr.error("Lấy thông tin loại trái cây thất bại!");
+    }
+  };
+
+  const setDataEdit = async (data) =>{
+
+    await setDataEditCategory(data)
+    await setIsEdit(true)
   }
 
-  const handleUpdateCategory = async (values, actions) => {
-    console.log("values", values);
-  }
+  const handleAddNewCategory = async (values) => {
+    try {
+      await axios.post(
+        "https://33ee-14-186-59-143.ngrok.io/rest/admin/category/add",
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toastr.success("Thêm loại trái cây thành công!");
+      getData();
+    } catch (error) {
+      toastr.error("Thêm thất bại!");
+    }
+  };
+
+  const handleUpdateCategory = async (values) => {
+    try {
+      await axios.put(
+        "https://33ee-14-186-59-143.ngrok.io/rest/admin/category/update",
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toastr.success("Sửa loại trái cây thành công!");
+      getData();
+    } catch (error) {
+      toastr.error("Sửa thất bại!");
+    }
+  };
 
   const addCategoryModal = () => {
     return (
@@ -32,7 +100,6 @@ const AdminCategory = () => {
           <Formik
             initialValues={{
               name: "",
-              description: "",
             }}
             onSubmit={handleAddNewCategory}
           >
@@ -54,7 +121,7 @@ const AdminCategory = () => {
                       type="text"
                     />
                   </div>
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font-bold mb-2"
                       htmlFor="description"
@@ -69,7 +136,7 @@ const AdminCategory = () => {
                       as="textarea"
                       rows="4"
                     />
-                  </div>
+                  </div> */}
                   <button
                     className="bg-pink px-4 py-3 rounded-3 border-0 text-white mt-3"
                     type="submit"
@@ -89,12 +156,15 @@ const AdminCategory = () => {
   const updateCategoryModal = () => {
     return (
       <Modal isOpen={isEdit} toggle={toggleEdit}>
-        <ModalHeader toggle={toggleEdit}>Cập nhập thông tin loại trái cây</ModalHeader>
+        <ModalHeader toggle={toggleEdit}>
+          Cập nhập thông tin loại trái cây
+        </ModalHeader>
         <ModalBody>
           <Formik
             initialValues={{
-              name: "",
-              description: "",
+              id:dataEditCategory.id,
+              name: dataEditCategory.name,
+              
             }}
             onSubmit={handleUpdateCategory}
           >
@@ -116,7 +186,7 @@ const AdminCategory = () => {
                       type="text"
                     />
                   </div>
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font-bold mb-2"
                       htmlFor="description"
@@ -131,7 +201,7 @@ const AdminCategory = () => {
                       as="textarea"
                       rows="4"
                     />
-                  </div>
+                  </div> */}
                   <button
                     className="bg-pink px-4 py-3 rounded-3 border-0 text-white mt-3"
                     type="submit"
@@ -166,26 +236,22 @@ const AdminCategory = () => {
           <tr>
             <th scope="col">Mã</th>
             <th scope="col">Tên thể loại</th>
-            <th scope="col">Mô tả</th>
           </tr>
         </thead>
-        <tbody>
-          <tr style={{ cursor: "pointer" }} onClick={() => setIsEdit(true)}>
-            <th scope="row">SKU1545</th>
-            <td>Táo</td>
-            <td>Không nè</td>
-          </tr>
-          <tr style={{ cursor: "pointer" }} onClick={() => setIsEdit(true)}>
-            <th scope="row">SKU1545</th>
-            <td>Táo</td>
-            <td>Không nè</td>
-          </tr>
-          <tr style={{ cursor: "pointer" }} onClick={() => setIsEdit(true)}>
-            <th scope="row">SKU1545</th>
-            <td>Táo</td>
-            <td>Không nè</td>
-          </tr>
-        </tbody>
+        {category.length>0?<tbody>
+          {category.length > 0 &&
+            category.map((data, index) => (
+              <tr
+                key={index}
+                style={{ cursor: "pointer" }}
+                onClick={() => setDataEdit(data)}
+              >
+                <th scope="row">{data.id}</th>
+                <td>{data.name}</td>
+              </tr>
+            ))}
+        </tbody>:<div className="text-success mt-2">Đang lấy danh sách loại trái cây vui lòng đợi...</div>}
+        
       </table>
       {addCategoryModal()}
       {updateCategoryModal()}
