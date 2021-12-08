@@ -19,7 +19,7 @@ CREATE TABLE employee (
     last_name nvarchar(50),
     sex boolean,
     dob date,
-    phone_number varchar(10),
+    phone_number varchar(12),
     address nvarchar(100),
     email varchar(50),
     role VARCHAR(50)
@@ -43,7 +43,7 @@ CREATE TABLE product (
     id_category bigint not null,
     code nvarchar(50) not null,
     name nvarchar(50),
-    image text,
+    image longtext,
     short_description nvarchar(150),
     long_description nvarchar(255),
     purchase_price double not null,
@@ -57,7 +57,7 @@ CREATE TABLE customer (
     last_name nvarchar(50),
     sex boolean,
     dob date,
-    phone_number varchar(10),
+    phone_number varchar(12),
     address nvarchar(100),
     email varchar(50),
     role VARCHAR(50)
@@ -95,13 +95,9 @@ CREATE TABLE sell_invoice (
     code nvarchar(50) not null,
     created_time date,
     status int,
-    total_price double
-);
-
-CREATE TABLE sell_invoice_promotion (
-	id bigint primary key auto_increment,
-    id_sell bigint not null,
-    id_promotion bigint not null
+    total_price double,
+		receive_address text,
+		receive_name text
 );
 
 CREATE TABLE sell_invoice_details (
@@ -128,10 +124,10 @@ ALTER TABLE sell_invoice ADD CONSTRAINT fk_sell_invoice_account FOREIGN KEY (id_
 
 ALTER TABLE sell_invoice ADD CONSTRAINT fk_sell_invoice_customer FOREIGN KEY (id_customer) REFERENCES customer(id);
 
-ALTER TABLE sell_invoice_promotion ADD CONSTRAINT fk_sell_invoice_promotion_promotion FOREIGN KEY (id_promotion) REFERENCES promotion(id);
-
-ALTER TABLE sell_invoice_promotion ADD CONSTRAINT fk_sell_invoice_promotion_sell_invoice FOREIGN KEY (id_sell) REFERENCES product(id);
-
 ALTER TABLE sell_invoice_details ADD CONSTRAINT fk_sell_invoice_details_sell_invoice FOREIGN KEY (id_sell) REFERENCES sell_invoice(id);
 
 ALTER TABLE sell_invoice_details ADD CONSTRAINT fk_sell_invoice_details_product FOREIGN KEY (id_product) REFERENCES product(id);
+
+
+ALTER TABLE sell_invoice MODIFY COLUMN receive_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE sell_invoice MODIFY COLUMN receive_address VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

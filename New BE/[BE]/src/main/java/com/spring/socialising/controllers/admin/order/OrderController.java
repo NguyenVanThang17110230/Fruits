@@ -47,7 +47,7 @@ public class OrderController {
     }
 
     @ApiOperation("Change status finished")
-    @PostMapping("/status/finish/{id}")
+    @GetMapping("/status-finish/{id}")
     public ResponseEntity<ResponseData> fnishOrder(@PathVariable Long id){
         SellInvoiceEntity sellInvoiceEntity = orderService.findById(id);
         if(sellInvoiceEntity == null){
@@ -57,7 +57,7 @@ public class OrderController {
                     .data(null)
                     .build(),BAD_REQUEST);
         }
-        if(sellInvoiceEntity.getStatus()==0){
+        if(sellInvoiceEntity.getStatus()==1){
             return new ResponseEntity<>(ResponseData.builder()
                     .success(false)
                     .message("Order have already finished")

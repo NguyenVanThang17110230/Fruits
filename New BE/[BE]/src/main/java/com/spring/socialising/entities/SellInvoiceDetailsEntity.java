@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-@Table(name = "sell_invoice_promotion")
+@Table(name = "sell_invoice_details")
 public class SellInvoiceDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,9 @@ public class SellInvoiceDetailsEntity {
 
     private Long id_product;
 
-    private Long amount;
+    private String code;
 
-    private BigDecimal price;
+    private Integer amount;
+
+    private float price;
 }

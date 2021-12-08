@@ -4,7 +4,6 @@ import com.spring.socialising.entities.SellInvoiceDetailsEntity;
 import com.spring.socialising.entities.SellInvoiceEntity;
 import com.spring.socialising.repositories.SellInvoiceDetailRepository.SellInvoiceDetailRepository;
 import com.spring.socialising.repositories.SellInvoiceRepository.SellInvoiceRepository;
-import com.spring.socialising.services.OrderService.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +46,25 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public SellInvoiceEntity updateSellInvoice(SellInvoiceEntity sellInvoiceEntity) {
         return sellInvoiceRepository.save(sellInvoiceEntity);
+    }
+
+    @Override
+    public List<SellInvoiceEntity> findByCustomer(Long id) {
+        return sellInvoiceRepository.findByCustomer(id);
+    }
+
+    @Override
+    public SellInvoiceEntity findByCode(String code) {
+        return sellInvoiceRepository.findByCode(code);
+    }
+
+    @Override
+    public SellInvoiceEntity saveInvoice(SellInvoiceEntity sellInvoiceEntity) {
+        return sellInvoiceRepository.save(sellInvoiceEntity);
+    }
+
+    @Override
+    public SellInvoiceDetailsEntity SaveInvoiceDetail(SellInvoiceDetailsEntity sellInvoiceDetailsEntity) {
+        return sellInvoiceDetailRepository.save(sellInvoiceDetailsEntity);
     }
 }

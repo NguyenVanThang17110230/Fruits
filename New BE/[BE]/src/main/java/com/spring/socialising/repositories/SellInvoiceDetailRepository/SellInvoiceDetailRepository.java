@@ -10,5 +10,5 @@ import java.util.List;
 public interface SellInvoiceDetailRepository extends JpaRepository<SellInvoiceDetailsEntity, Long> {
 
     @Query("SELECT SID FROM SellInvoiceDetailsEntity SID WHERE SID.id_sell =:id")
-    public List<SellInvoiceDetailsEntity> findListByIdSell(@Param("id") Long id);
+    List<SellInvoiceDetailsEntity> findListByIdSell(@Param("id") Long id);
 }

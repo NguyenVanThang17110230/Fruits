@@ -24,5 +24,17 @@ public class SellInvoiceEntity {
 
     private Integer status;
 
-    private BigDecimal total_price;
+    private float total_price;
+
+    private String promotion_code;
+
+    private float promotion_price;
+
+    private float final_price;
+
+    private String receive_name;
+
+    private String receive_phone_number;
+
+    private String receive_address;
 }

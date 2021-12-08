@@ -30,7 +30,7 @@ public class ProductEntity {
 
 	private String long_description;
 
-	private BigDecimal purchase_price;
+	private float purchase_price;
 
-	private BigDecimal price;
+	private float price;
 }

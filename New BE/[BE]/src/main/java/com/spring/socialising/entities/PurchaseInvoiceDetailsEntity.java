@@ -18,7 +18,9 @@ public class PurchaseInvoiceDetailsEntity {
 
     private Long id_product;
 
+    private String code;
+
     private int amount;
 
-    private BigDecimal price;
+    private float price;
 }

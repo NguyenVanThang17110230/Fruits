@@ -70,9 +70,9 @@ public class ProductController {
     @ApiOperation("Add product into system")
     @PostMapping("/add")
     public ResponseEntity<ResponseData> addProduct(@RequestBody ProductEntity productEntity){
-        productEntity.setPrice(new BigDecimal(0));
+        productEntity.setPrice(0);
         productEntity.setAmount(0);
-        productEntity.setPurchase_price(new BigDecimal(0));
+        productEntity.setPurchase_price(0);
 
         ProductEntity productCode = null;
         String code = null;
@@ -107,13 +107,14 @@ public class ProductController {
             productFound.setAmount(productFound.getAmount()+product.getAmount());
             productFound.setPurchase_price(product.getPurchase_price());
             productFound.setPrice(product.getPrice());
+            product.setCode(productFound.getCode());
             productService.updateProduct(productFound);
         }
 
         JwtUserDetails userDetails = (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PurchaseInvoiceEntity purchaseInvoiceEntity = new PurchaseInvoiceEntity();
         purchaseInvoiceEntity.setId_account(Long.parseLong(userDetails.getId()));
-        purchaseInvoiceEntity.setCode(UUID.randomUUID().toString().toLowerCase().replace("-","").substring(0, 8));
+        purchaseInvoiceEntity.setCode(UUID.randomUUID().toString().toUpperCase().replace("-","").substring(0, 8).toUpperCase());
         purchaseInvoiceEntity.setTotal_price(new BigDecimal(0));
         purchaseInvoiceEntity.setCreated_time(LocalDateTime.now());
         purchaseInvoiceService.addPurchaseWithSupplier(purchaseInvoiceEntity);
@@ -123,10 +124,11 @@ public class ProductController {
             PurchaseInvoiceDetailsEntity purchaseInvoiceDetailsEntity = new PurchaseInvoiceDetailsEntity();
             purchaseInvoiceDetailsEntity.setId_purchase(purchaseInvoiceEntity.getId());
             purchaseInvoiceDetailsEntity.setId_product(product.getId());
+            purchaseInvoiceDetailsEntity.setCode(product.getCode().toUpperCase());
             purchaseInvoiceDetailsEntity.setAmount(product.getAmount());
-            purchaseInvoiceDetailsEntity.setPrice(product.getPrice());
+            purchaseInvoiceDetailsEntity.setPrice(product.getPurchase_price());
             purchaseInvoiceService.addPurchaseDetail(purchaseInvoiceDetailsEntity);
-            total += product.getAmount() * product.getPurchase_price().floatValue();
+            total += product.getAmount() * product.getPurchase_price();
         }
 
         purchaseInvoiceEntity.setTotal_price(new BigDecimal(total));
@@ -151,7 +153,6 @@ public class ProductController {
         }
 
         ProductEntity productEntity = productService.findProductById(product.getId());
-        productEntity.setAmount(product.getAmount());
         productEntity.setPrice(product.getPrice());
         productEntity.setName(product.getName());
         productEntity.setId_category(product.getId_category());
