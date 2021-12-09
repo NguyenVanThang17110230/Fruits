@@ -29,7 +29,7 @@ const Supplier = () => {
   const getData = async () => {
     try {
       const res = await axios.get(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/supplier/list",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/supplier/list",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ const Supplier = () => {
   const handleAddNewCategory = async (values) => {
     try {
       const res = await axios.post(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/supplier/add",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/supplier/add",
         values,
         {
           headers: {
@@ -71,7 +71,7 @@ const Supplier = () => {
   const handleUpdateCategory = async (values) => {
     try {
       const res = await axios.put(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/supplier/update",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/supplier/update",
         values,
         {
           headers: {

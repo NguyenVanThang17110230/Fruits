@@ -35,7 +35,7 @@ const AdminCategory = () => {
     try {
 
       const res = await axios.get(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/category/list",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/category/list",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ const AdminCategory = () => {
   const handleAddNewCategory = async (values) => {
     try {
       await axios.post(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/category/add",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/category/add",
         values,
         {
           headers: {
@@ -77,7 +77,7 @@ const AdminCategory = () => {
   const handleUpdateCategory = async (values) => {
     try {
       await axios.put(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/category/update",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/category/update",
         values,
         {
           headers: {

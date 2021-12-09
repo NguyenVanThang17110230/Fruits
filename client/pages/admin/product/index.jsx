@@ -19,6 +19,7 @@ const AdminProduct = () => {
   const [category, setCategory] = useState([]);
   const [supplier, setSupplier] = useState([]);
   const [product, setProduct] = useState([]);
+  const [productSelect, setProductSelect] = useState([]);
   const toggle = () => {
     setModal(!modal);
   };
@@ -44,6 +45,7 @@ const AdminProduct = () => {
 
       const product = res.data.data;
       setProduct(product);
+      setProductSelect(product[0]);
     } catch (error) {
       toastr.error("Lấy thông tin loại trái cây thất bại!");
     }
@@ -327,6 +329,16 @@ const AdminProduct = () => {
     );
   };
 
+  const setChosePr = (id) => {
+   
+    const data = product.find(x => x.id == id);
+    if (data) {
+      setProductSelect(data);
+    }
+    return data
+  };
+  
+
   const purchaseModal = () => {
     return (
       <Modal isOpen={isPurchase} toggle={togglePurchase}>
@@ -334,10 +346,10 @@ const AdminProduct = () => {
         <ModalBody>
           <Formik
             initialValues={{
-              name: product[0] && product[0].id,
+              name: productSelect.id,
               quantity: "",
-              purchasePrice: product[0] && product[0].purchase_price,
-              sellPrice: product[0] && product[0].price,
+              purchasePrice: productSelect.purchase_price,
+              sellPrice: productSelect.price,
             }}
             onSubmit={handleAddNewPurchase}
           >
@@ -359,6 +371,14 @@ const AdminProduct = () => {
                           placeholder="Loại trái cây"
                           className="form-control"
                           as="select"
+                          onChange={(event) => {
+                            props.setFieldValue("name", event.target.value)
+                            if(event.target.value){
+                              setChosePr(event.target.value)
+                              props.setFieldValue("purchasePrice", setChosePr(event.target.value).purchase_price)
+                              props.setFieldValue("sellPrice", setChosePr(event.target.value).price)
+                            }
+                          }}
                         >
                           {product.length > 0 &&
                             product.map((data, index) => (

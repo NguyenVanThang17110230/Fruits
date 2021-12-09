@@ -19,10 +19,11 @@ const SidebarAdmin = () => {
   }
   return (
     <div
-      className="bg-primary w-100 h-100"
+      className="bg-primary vh-100 position-fixed"
       style={{
         backgroundImage: "linear-gradient(195deg,#42424a,#191919)",
         borderRadius: "15px",
+        width:"15%",
       }}
     >
       <nav className="navbar navbar-expand-lg navbar-light py-3 shadow-sm flex-column h-100">

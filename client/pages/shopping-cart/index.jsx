@@ -332,16 +332,6 @@ const ShoppingCart = () => {
                       email: user && user.email,
                       address: user.address,
                       phoneNumber: user.phone_number,
-                      //                 address: "127 Lê Văn Viêt, Quận 9, TP.Hồ Chí Minh"
-                      // dob: "2003-02-12T00:00:00"
-                      // email: "ahihi@gmail.com"
-                      // first_name: "Thang"
-                      // id: 4
-                      // id_account: 10
-                      // last_name: "Nguyen"
-                      // phone_number: null
-                      // role: "USER"
-                      // sex: true
                     }}
                     onSubmit={handleOrder}
                   >

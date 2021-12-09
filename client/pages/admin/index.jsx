@@ -16,7 +16,7 @@ const Dashboard = () => {
     try {
  
       const res = await axios.get(
-        "https://33ee-14-186-59-143.ngrok.io/rest/admin/statis",
+        "https://4388-14-186-59-143.ngrok.io/rest/admin/statis",
         {
           headers: {
             Authorization: `Bearer ${token}`,
